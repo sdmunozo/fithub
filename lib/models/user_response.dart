@@ -1,4 +1,3 @@
-// Modelo para almacenar las respuestas del usuario
 class UserResponse {
   String name;
   String email;

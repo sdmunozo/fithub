@@ -7,13 +7,15 @@ class NumberSelectorWidget extends StatefulWidget {
   final String type; // 'height', 'weight', o 'heartRate'
   final Function(double, String) onValueChanged;
 
-  NumberSelectorWidget({
+  const NumberSelectorWidget({
+    super.key,
     required this.title,
     required this.type,
     required this.onValueChanged,
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _NumberSelectorWidgetState createState() => _NumberSelectorWidgetState();
 }
 
@@ -41,17 +43,16 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
   @override
   void initState() {
     super.initState();
-    double initialValue = 0.0; // Inicialización por defecto
+    double initialValue = 0.0;
 
     if (widget.type == 'height') {
-      initialValue = isMetric ? 1.6 : 5.25; // Valor inicial en metros o pies
+      initialValue = isMetric ? 1.6 : 5.25;
     } else if (widget.type == 'weight') {
-      initialValue = isMetric ? 70.0 : 154.32; // Valor inicial en kg o lb
+      initialValue = isMetric ? 70.0 : 154.32;
     } else if (widget.type == 'heartRate') {
       initialValue = 70.0;
     }
 
-    // Separar la parte entera y decimal del valor inicial
     intPart = initialValue.floor();
     decimalPart = ((initialValue - intPart) * 100).round();
 
@@ -70,37 +71,34 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
         if (isMetric) {
           minValue = minHeightFt;
           maxValue = maxHeightFt;
-          value *= 3.281; // Convertir de metros a pies
+          value *= 3.281;
         } else {
           minValue = minHeightM;
           maxValue = maxHeightM;
-          value /= 3.281; // Convertir de pies a metros
+          value /= 3.281;
         }
       } else if (widget.type == 'weight') {
         if (isMetric) {
           minValue = minWeightLb;
           maxValue = maxWeightLb;
-          value *= 2.205; // Convertir de kg a lb
+          value *= 2.205;
         } else {
           minValue = minWeightKg;
           maxValue = maxWeightKg;
-          value /= 2.205; // Convertir de lb a kg
+          value /= 2.205;
         }
       } else if (widget.type == 'heartRate') {
         minValue = minHeartRateBPM;
         maxValue = maxHeartRateBPM;
       }
 
-      // Limitar el valor al rango permitido
       if (value < minValue) value = minValue;
       if (value > maxValue) value = maxValue;
 
-      // Separar la parte entera y decimal
       intPart = value.floor();
       decimalPart = ((value - intPart) * 100).round();
       isMetric = !isMetric;
 
-      // Actualiza los valores en los controladores de NumberPicker
       _intPartController.jumpToItem(intPart);
       _decimalPartController.jumpToItem(decimalPart);
 
@@ -149,7 +147,7 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
             ),
             Text(
               widget.title,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             if (widget.type != 'heartRate')
               GestureDetector(
@@ -170,8 +168,7 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
                             fontSize: 16,
                             color: Colors.green,
                             fontWeight: FontWeight.bold,
-                            decoration:
-                                TextDecoration.none, // Quitamos el subrayado
+                            decoration: TextDecoration.none,
                           ),
                         ),
                         Container(
@@ -184,11 +181,64 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
                         ),
                       ],
                     ),
-                    const Spacer(), // Espacio flexible
+                    const Spacer(),
                   ],
                 ),
               ),
-            Spacer(),
+            Expanded(
+              child: Container(
+                color: const Color.fromARGB(0, 0, 0, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        NumberPickerWidget(
+                          controller: _intPartController,
+                          initialValue: intPart,
+                          onValueChanged: (value) {
+                            setState(() {
+                              intPart = value;
+                            });
+                          },
+                        ),
+                        if (widget.type != 'heartRate') ...[
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Text(
+                            ".",
+                            style: TextStyle(fontSize: 44),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          NumberPickerWidget(
+                            controller: _decimalPartController,
+                            initialValue: decimalPart,
+                            isDecimal: true,
+                            onValueChanged: (value) {
+                              setState(() {
+                                decimalPart = value;
+                              });
+                            },
+                          ),
+                        ],
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          getUnits(),
+                          style: const TextStyle(fontSize: 40),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            /*
             Container(
               color: const Color.fromARGB(0, 0, 0, 0),
               child: Expanded(
@@ -208,14 +258,14 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
                           },
                         ),
                         if (widget.type != 'heartRate') ...[
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           const Text(
                             ".",
                             style: TextStyle(fontSize: 44),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           NumberPickerWidget(
@@ -229,19 +279,19 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
                             },
                           ),
                         ],
-                        SizedBox(
+                        const SizedBox(
                           width: 15,
                         ),
                         Text(
                           getUnits(),
-                          style: TextStyle(fontSize: 40),
+                          style: const TextStyle(fontSize: 40),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-            ),
+            ),*/
             const SizedBox(
               height: 20,
             ),
@@ -250,7 +300,7 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
                 GestureDetector(
                   onTap: _cancel,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(12),
@@ -258,7 +308,7 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
                     ),
                     height: 50,
                     width: (GlobalConfigProvider.maxWidth! * 0.5),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Cancelar',
                         style: TextStyle(color: Colors.white),
@@ -269,7 +319,7 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
                 GestureDetector(
                   onTap: _accept,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color(0xFF3DDB8F),
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(12),
@@ -277,7 +327,7 @@ class _NumberSelectorWidgetState extends State<NumberSelectorWidget> {
                     ),
                     height: 50,
                     width: (GlobalConfigProvider.maxWidth! * 0.5),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Aceptar',
                         style: TextStyle(color: Colors.white),

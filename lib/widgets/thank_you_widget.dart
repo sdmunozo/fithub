@@ -1,8 +1,8 @@
+import 'package:fithub_v1/widgets/responses_modal_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 class ThankYouWidget extends StatelessWidget {
-  const ThankYouWidget({Key? key}) : super(key: key);
+  const ThankYouWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class ThankYouWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: 20),
-          Text(
+          const Text(
             '¡Gracias por completar la encuesta, te contactaremos en 24hrs por WhatsApp!',
             style: TextStyle(
               fontSize: 24,
@@ -23,42 +23,73 @@ class ThankYouWidget extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue,
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              textStyle: const TextStyle(fontSize: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => const ResponsesModal(),
+              );
+            },
+            child: const Text('Ver Respuestas'),
+          ),
         ],
       ),
     );
   }
 }
 
-/*
+
+
+
+
+
+
+/* Primera version: Antes de estandarizacion
+
 class ThankYouWidget extends StatelessWidget {
-  const ThankYouWidget({Key? key}) : super(key: key);
+  const ThankYouWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/form/undraw_Timeline_re_aw6g.png'),
-            const SizedBox(height: 20),
-            Text(
-              '¡Gracias por completar la entrevista!',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-              textAlign: TextAlign.center,
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: 20),
+          const Text(
+            '¡Gracias por completar la encuesta, te contactaremos en 24hrs por WhatsApp!',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
             ),
-            const SizedBox(height: 20),
-            //Lottie.asset('assets/animations/thank_you_animation.json'),
-          ],
-        ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => const ResponsesModalWidget(),
+              );
+            },
+            child: const Text('Ver Respuestas'),
+          ),
+        ],
       ),
     );
   }
 }
+
 */

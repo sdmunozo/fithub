@@ -6,7 +6,8 @@ class NumberPickerWidget extends StatefulWidget {
   final Function(int) onValueChanged;
   final FixedExtentScrollController controller;
 
-  NumberPickerWidget({
+  const NumberPickerWidget({
+    super.key,
     required this.initialValue,
     required this.onValueChanged,
     required this.controller,
@@ -14,6 +15,7 @@ class NumberPickerWidget extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _NumberPickerState createState() => _NumberPickerState();
 }
 
@@ -30,7 +32,7 @@ class _NumberPickerState extends State<NumberPickerWidget> {
   Widget build(BuildContext context) {
     int maxItems = widget.isDecimal ? 100 : 200;
 
-    return Container(
+    return SizedBox(
       height: 150,
       width: 80,
       child: ListWheelScrollView.useDelegate(
@@ -39,7 +41,7 @@ class _NumberPickerState extends State<NumberPickerWidget> {
         onSelectedItemChanged: (index) {
           widget.onValueChanged(index);
         },
-        physics: FixedExtentScrollPhysics(),
+        physics: const FixedExtentScrollPhysics(),
         childDelegate: ListWheelChildBuilderDelegate(
           builder: (context, index) {
             return Center(
@@ -47,7 +49,7 @@ class _NumberPickerState extends State<NumberPickerWidget> {
                 widget.isDecimal
                     ? index.toString().padLeft(2, '0')
                     : index.toString(),
-                style: TextStyle(fontSize: 44),
+                style: const TextStyle(fontSize: 44),
               ),
             );
           },

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:convert';
 import 'package:fithub_v1/screens/form_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +24,10 @@ class MyApp extends StatelessWidget {
         GlobalConfigProvider.setMaxHeight(constraints.maxHeight);
         GlobalConfigProvider.setMaxWidth(constraints.maxWidth);
 
-        return MaterialApp(
+        return const MaterialApp(
           //home: SurveyScreen(),
           //home: FormScreen1(),
-          home: const FormScreen(),
+          home: FormScreen(),
           debugShowCheckedModeBanner: false,
         );
       },
@@ -34,7 +36,10 @@ class MyApp extends StatelessWidget {
 }
 
 class SurveyScreen extends StatefulWidget {
+  const SurveyScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _SurveyScreenState createState() => _SurveyScreenState();
 }
 
@@ -75,7 +80,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Resumen"),
+          title: const Text("Resumen"),
           content: SingleChildScrollView(
             child: ListBody(
               children: answers.entries.map((entry) {
@@ -92,7 +97,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
           ),
           actions: [
             TextButton(
-              child: Text("Cerrar"),
+              child: const Text("Cerrar"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -106,7 +111,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
   @override
   Widget build(BuildContext context) {
     if (questions.isEmpty) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
@@ -118,52 +123,52 @@ class _SurveyScreenState extends State<SurveyScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cuestionario'),
+        title: const Text('Cuestionario'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
+            const Center(
               child: Icon(
                 FontAwesomeIcons.questionCircle,
                 size: 60,
                 color: Colors.blueAccent,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             LinearProgressIndicator(
               value: progress,
               backgroundColor: Colors.grey[300],
               color: Colors.blueAccent,
               minHeight: 8,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               currentQuestion['question'],
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
                 child: SingleChildScrollView(
                     child: Column(
                         children: _buildQuestionWidget(currentQuestion)))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 nextQuestion(_getAnswer());
               },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Text('Siguiente', style: TextStyle(fontSize: 18)),
-              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text('Siguiente', style: TextStyle(fontSize: 18)),
               ),
             ),
           ],
@@ -178,7 +183,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
         return [
           TextField(
             controller: textController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Tu respuesta',
               prefixIcon: Icon(Icons.text_fields),
@@ -192,7 +197,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
         return [
           TextField(
             controller: textController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Tu correo electrónico',
               prefixIcon: Icon(Icons.email),
@@ -206,8 +211,8 @@ class _SurveyScreenState extends State<SurveyScreen> {
       case 'date':
         return [
           ElevatedButton.icon(
-            icon: Icon(Icons.calendar_today),
-            label: Text('Seleccionar fecha'),
+            icon: const Icon(Icons.calendar_today),
+            label: const Text('Seleccionar fecha'),
             onPressed: () async {
               DateTime? picked = await showDatePicker(
                 context: context,
@@ -279,6 +284,8 @@ class _SurveyScreenState extends State<SurveyScreen> {
 }
 
 class FormScreen1 extends StatefulWidget {
+  const FormScreen1({super.key});
+
   @override
   _FormScreenState createState() => _FormScreenState();
 }
@@ -302,35 +309,6 @@ class _FormScreenState extends State<FormScreen1> {
     setState(() {
       formData = json.decode(jsonString);
     });
-  }
-
-  String? _validateInput(String? value, String format, bool isRequired) {
-    if (_submitted && isRequired && (value == null || value.isEmpty)) {
-      return 'Este campo es obligatorio';
-    }
-
-    if (value != null && value.isNotEmpty) {
-      switch (format) {
-        case 'email':
-          final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-          if (!emailRegex.hasMatch(value)) {
-            return 'Ingrese un correo electrónico válido';
-          }
-          break;
-        case 'integer':
-          if (int.tryParse(value) == null) {
-            return 'Ingrese un número entero válido';
-          }
-          break;
-        case 'double':
-          if (double.tryParse(value) == null) {
-            return 'Ingrese un número válido';
-          }
-          break;
-      }
-    }
-
-    return null;
   }
 
   String _determineLevel() {
@@ -476,7 +454,7 @@ class _FormScreenState extends State<FormScreen1> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Resumen de Respuestas'),
+            title: const Text('Resumen de Respuestas'),
             content: SingleChildScrollView(
               child: ListBody(
                 children: [
@@ -506,15 +484,15 @@ class _FormScreenState extends State<FormScreen1> {
                         '${question['question']}: $answer',
                       );
                     }
-                  }).toList(),
-                  SizedBox(height: 20),
+                  }),
+                  const SizedBox(height: 20),
                   Text('Nivel Determinado: $level'),
                 ],
               ),
             ),
             actions: [
               TextButton(
-                child: Text('OK'),
+                child: const Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -528,12 +506,12 @@ class _FormScreenState extends State<FormScreen1> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content:
-                Text('Asegúrate de responder todas las preguntas requeridas'),
+            title: const Text('Error'),
+            content: const Text(
+                'Asegúrate de responder todas las preguntas requeridas'),
             actions: [
               TextButton(
-                child: Text('OK'),
+                child: const Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -560,7 +538,9 @@ class _FormScreenState extends State<FormScreen1> {
 
   @override
   void dispose() {
-    _controllers.values.forEach((controller) => controller.dispose());
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -568,8 +548,8 @@ class _FormScreenState extends State<FormScreen1> {
   Widget build(BuildContext context) {
     if (formData == null) {
       return Scaffold(
-        appBar: AppBar(title: Text('Formulario de Rutinas')),
-        body: Center(child: CircularProgressIndicator()),
+        appBar: AppBar(title: const Text('Formulario de Rutinas')),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -577,7 +557,7 @@ class _FormScreenState extends State<FormScreen1> {
     final answers = formData!['answers'];
 
     return Scaffold(
-      appBar: AppBar(title: Text('Formulario de Rutinas')),
+      appBar: AppBar(title: const Text('Formulario de Rutinas')),
       body: Form(
         key: _formKey,
         child: ListView.builder(
@@ -599,8 +579,8 @@ class _FormScreenState extends State<FormScreen1> {
                       isRequired &&
                       (answersMap[questionId] == null ||
                           answersMap[questionId].isEmpty))
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5.0),
                       child: Text(
                         'Este campo es obligatorio',
                         style: TextStyle(color: Colors.red),
@@ -624,7 +604,8 @@ class _FormScreenState extends State<FormScreen1> {
                         keyboardType: format == 'integer'
                             ? TextInputType.number
                             : format == 'double'
-                                ? TextInputType.numberWithOptions(decimal: true)
+                                ? const TextInputType.numberWithOptions(
+                                    decimal: true)
                                 : TextInputType.text,
                         inputFormatters: format == 'integer'
                             ? [FilteringTextInputFormatter.digitsOnly]
@@ -657,9 +638,7 @@ class _FormScreenState extends State<FormScreen1> {
                           }
                         },
                         child: Text(
-                          answersMap[questionId] != null
-                              ? answersMap[questionId]
-                              : 'Seleccionar fecha',
+                          answersMap[questionId] ?? 'Seleccionar fecha',
                         ),
                       ),
                     buildValidationMessage(),
@@ -772,7 +751,7 @@ class _FormScreenState extends State<FormScreen1> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _submitForm,
-        child: Icon(Icons.send),
+        child: const Icon(Icons.send),
       ),
     );
   }
@@ -782,9 +761,11 @@ class HeightPicker extends StatefulWidget {
   final String initialValue;
   final Function(String) onHeightChanged;
 
-  HeightPicker({required this.initialValue, required this.onHeightChanged});
+  const HeightPicker(
+      {super.key, required this.initialValue, required this.onHeightChanged});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HeightPickerState createState() => _HeightPickerState();
 }
 
@@ -811,7 +792,7 @@ class _HeightPickerState extends State<HeightPicker> {
         Expanded(
           child: TextFormField(
             controller: heightController,
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
               FilteringTextInputFormatter.allow(
                 RegExp(r'^\d*\.?\d*$'),
@@ -844,7 +825,8 @@ class WeightPicker extends StatefulWidget {
   final String initialValue;
   final Function(String) onWeightChanged;
 
-  WeightPicker({required this.initialValue, required this.onWeightChanged});
+  const WeightPicker(
+      {super.key, required this.initialValue, required this.onWeightChanged});
 
   @override
   _WeightPickerState createState() => _WeightPickerState();
@@ -873,7 +855,7 @@ class _WeightPickerState extends State<WeightPicker> {
         Expanded(
           child: TextFormField(
             controller: weightController,
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
               FilteringTextInputFormatter.allow(
                 RegExp(r'^\d*\.?\d*$'),

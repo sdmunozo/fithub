@@ -1,5 +1,6 @@
 import 'package:fithub_v1/layout/main_layout.dart';
 import 'package:fithub_v1/providers/form_controller.dart';
+import 'package:fithub_v1/widgets/form_progress_bar_widget.dart';
 import 'package:fithub_v1/widgets/height_weight_heart_rate_form.dart';
 import 'package:fithub_v1/widgets/interview_completion_widget.dart';
 import 'package:fithub_v1/widgets/name_email_form.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FormScreen extends StatelessWidget {
-  const FormScreen({Key? key}) : super(key: key);
+  const FormScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,31 +26,8 @@ class FormScreen extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (currentIndex < 3)
-                Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeInOut,
-                      width: (MediaQuery.of(context).size.width - 32) *
-                          (formController.currentQuestionIndex.value /
-                              formController.totalQuestions),
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ],
-                ),
+              if (currentIndex < formController.totalQuestions)
+                FormProgressBarWidget(formController: formController),
               const SizedBox(height: 20),
               QuestionsViewWidget(
                 image: _getImageForIndex(currentIndex),
@@ -64,7 +42,6 @@ class FormScreen extends StatelessWidget {
   }
 
   String _getImageForIndex(int index) {
-    // Devuelve la imagen correspondiente al índice
     switch (index) {
       case 0:
         return 'assets/images/form/undraw_Profile_data_re_v81r.png';
@@ -82,8 +59,8 @@ class FormScreen extends StatelessWidget {
   Widget _getChildForIndex(int index) {
     switch (index) {
       case 0:
-        return const HeightWeightHeartRateForm();
-      //return const NameEmailForm();
+        //return const HeightWeightHeartRateForm();
+        return const NameEmailForm();
       case 1:
         return const HeightWeightHeartRateForm();
       case 2:
@@ -95,6 +72,7 @@ class FormScreen extends StatelessWidget {
     }
   }
 }
+
 
 /*
 class FormScreen extends StatelessWidget {
