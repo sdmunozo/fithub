@@ -7,7 +7,7 @@ import 'dart:convert';
 
 class FormController extends GetxController {
   var currentQuestionIndex = 0.obs;
-  final totalQuestions = 6;
+  final totalQuestions = 4;
 
   Rx<UserResponse?> userResponse = Rx<UserResponse?>(null);
   final responses = <Map<String, dynamic>>[].obs;
