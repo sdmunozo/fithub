@@ -1,0 +1,8 @@
+version: "Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)"
+options: "52ca5452075b409d0252847ccda8bb35e1573d70ebbb956b36d61cdacc94b8d3"
+build_start_time: [1716597015, 813618000]
+build_end_time: [1716597015, 978211000]
+inputs:
+  "/Users/4urest/Desktop/dev/fithub_v1/macos/Flutter/GeneratedPluginRegistrant.swift": !private [1716597014, 1216495]
+  "/Users/4urest/Desktop/dev/fithub_v1/macos/Runner/AppDelegate.swift": !private [1706213857, 0]
+  "/Users/4urest/Desktop/dev/fithub_v1/macos/Runner/MainFlutterWindow.swift": !private [1706213857, 0]

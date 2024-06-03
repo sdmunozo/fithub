@@ -1,0 +1,144 @@
+{
+  "answers": {
+    "activity_duration": [
+      {"key": "activity_duration_1to3", "text": "De 1 - 3 meses"},
+      {"key": "activity_duration_3to6", "text": "De 3 - 6 meses"},
+      {"key": "activity_duration_6to9", "text": "De 6 - 9 meses"},
+      {"key": "activity_duration_9to12", "text": "De 9 - 12 meses"},
+      {"key": "activity_duration_12to18", "text": "De 12 - 18 meses"},
+      {"key": "activity_duration_18to24", "text": "De 18 - 24 meses"},
+      {"key": "activity_duration_24plus", "text": "Más de 2 años"}
+    ],
+    "training_duration": [
+      {"key": "training_duration_less30", "text": "Menos de 30 minutos"},
+      {"key": "training_duration_30to45", "text": "30 - 45 minutos"},
+      {"key": "training_duration_45to60", "text": "45 - 60 minutos"},
+      {"key": "training_duration_60to90", "text": "60 - 90 minutos"},
+      {"key": "training_duration_90plus", "text": "Más de 90 minutos"}
+    ],
+    "training_frequency": [
+      {"key": "training_frequency_1perweek", "text": "1 día por semana"},
+      {"key": "training_frequency_2perweek", "text": "2 días por semana"},
+      {"key": "training_frequency_3perweek", "text": "3 días por semana"},
+      {"key": "training_frequency_4perweek", "text": "4 días por semana"},
+      {"key": "training_frequency_5perweek", "text": "5 días por semana"},
+      {"key": "training_frequency_6perweek", "text": "6 días por semana"},
+      {"key": "training_frequency_7perweek", "text": "7 días por semana"}
+    ],
+    "training_intensity": [
+      {"key": "training_intensity_low", "text": "Baja"},
+      {"key": "training_intensity_medium", "text": "Moderada"},
+      {"key": "training_intensity_high", "text": "Alta"}
+    ],
+    "physical_activity_type": [
+      {"key": "physical_activity_weights_machines", "text": "Levantamiento de pesas y uso de maquinas"},
+      {"key": "physical_activity_functional_weight", "text": "Entrenamiento funcional con peso"},
+      {"key": "physical_activity_weights_no_machines", "text": "Levantamiento de pesas sin uso de maquinas"},
+      {"key": "physical_activity_functional_bodyweight", "text": "Entrenamiento funcional con mi propio peso (Calistenia)"},
+      {"key": "physical_activity_combat_sports", "text": "Deportes de combate"},
+      {"key": "physical_activity_team_sports", "text": "Deportes en conjunto"},
+      {"key": "physical_activity_individual_sports", "text": "Deportes individuales"},
+      {"key": "physical_activity_cardio_medium", "text": "Ejercicios cardiovasculares de intensidad media (Trote)"},
+      {"key": "physical_activity_flexibility", "text": "Ejercicios de Flexibilidad y Equilibrio (Yoga - Pilates)"},
+      {"key": "physical_activity_cardio_low", "text": "Ejercicios cardiovasculares de baja intensidad (Caminata)"}
+    ]
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "Nombre",
+      "type": "open",
+      "format": "text",
+      "required": true,
+      "answers": null
+    },
+    {
+      "id": 2,
+      "question": "Correo electrónico",
+      "type": "email",
+      "format": "email",
+      "required": true,
+      "answers": null
+    },
+    {
+      "id": 3,
+      "question": "Fecha de nacimiento",
+      "type": "date",
+      "format": "date",
+      "required": true,
+      "answers": null
+    },
+    {
+      "id": 4,
+      "question": "Altura (cm o pies)",
+      "type": "height",
+      "format": "double",
+      "required": true,
+      "answers": null
+    },
+    {
+      "id": 5,
+      "question": "Peso (kg o lbs)",
+      "type": "weight",
+      "format": "double",
+      "required": true,
+      "answers": null
+    },
+    {
+      "id": 6,
+      "question": "Frecuencia cardiaca en reposo",
+      "type": "open",
+      "format": "integer",
+      "required": true,
+      "answers": null
+    },
+    {
+      "id": 7,
+      "question": "¿Cuánto tiempo llevas realizando actividad física de forma continua?",
+      "type": "single_choice",
+      "format": null,
+      "required": true,
+      "answers": "activity_duration"
+    },
+    {
+      "id": 8,
+      "question": "¿Cuánto tiempo le dedicas actualmente a tus sesiones de entrenamiento?",
+      "type": "single_choice",
+      "format": null,
+      "required": true,
+      "answers": "training_duration"
+    },
+    {
+      "id": 9,
+      "question": "¿Con qué frecuencia?",
+      "type": "single_choice",
+      "format": null,
+      "required": true,
+      "answers": "training_frequency"
+    },
+    {
+      "id": 10,
+      "question": "¿Con qué nivel de intensidad realizas tus sesiones de entrenamiento?",
+      "type": "single_choice",
+      "format": null,
+      "required": true,
+      "answers": "training_intensity"
+    },
+    {
+      "id": 11,
+      "question": "¿Qué tipo de actividad física realizas actualmente?",
+      "type": "multiple_choice",
+      "format": null,
+      "required": false,
+      "answers": "physical_activity_type"
+    },
+    {
+      "id": 12,
+      "question": "Fecha de Inicio de la rutina",
+      "type": "date",
+      "format": "date",
+      "required": true,
+      "answers": null
+    }
+  ]
+}
