@@ -13,10 +13,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false, // Oculta el banner de debug
       home: FormScreen(),
     );
   }
 }
+
+/*
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: FormScreen(),
+    );
+  }
+}*/
 
 /*
 class TrainingInfo {

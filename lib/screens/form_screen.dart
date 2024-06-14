@@ -26,6 +26,42 @@ class FormScreen extends StatelessWidget {
           final int currentIndex = formController.currentWidgetIndex.value;
           final WidgetWithImage currentWidgetWithImage =
               _getWidgetWithImageForIndex(currentIndex);
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (currentIndex < formController.totalWidgets)
+                  FormProgressBarWidget(formController: formController),
+                const SizedBox(height: 20),
+                QuestionsViewWidget(
+                  image: currentWidgetWithImage.image,
+                  child: currentWidgetWithImage.child,
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+/*
+class FormScreen extends StatelessWidget {
+  const FormScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final FormController formController = Get.put(FormController());
+
+    return MainLayout(
+      child: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Obx(() {
+          final int currentIndex = formController.currentWidgetIndex.value;
+          final WidgetWithImage currentWidgetWithImage =
+              _getWidgetWithImageForIndex(currentIndex);
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -43,7 +79,7 @@ class FormScreen extends StatelessWidget {
       ),
     );
   }
-
+*/
   WidgetWithImage _getWidgetWithImageForIndex(int index) {
     final List<WidgetWithImage> widgetsWithImages = [
       WidgetWithImage(
