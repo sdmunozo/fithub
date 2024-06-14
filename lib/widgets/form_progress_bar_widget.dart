@@ -1,6 +1,46 @@
 import 'package:fithub_v1/providers/form_controller.dart';
+import 'package:fithub_v1/providers/global_config_provider.dart';
 import 'package:flutter/material.dart';
 
+class FormProgressBarWidget extends StatelessWidget {
+  const FormProgressBarWidget({
+    super.key,
+    required this.formController,
+  });
+
+  final FormController formController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          width: GlobalConfigProvider.maxWidth! * 0.9,
+          height: 20,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+          width: (GlobalConfigProvider.maxWidth! * 0.9) *
+              (formController.currentWidgetIndex.value /
+                  (formController.totalWidgets - 1)),
+          height: 20,
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+/*
 class FormProgressBarWidget extends StatelessWidget {
   const FormProgressBarWidget({
     super.key,
@@ -37,3 +77,5 @@ class FormProgressBarWidget extends StatelessWidget {
     );
   }
 }
+
+*/
