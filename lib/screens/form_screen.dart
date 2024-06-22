@@ -11,34 +11,73 @@ import 'package:fithub_v1/widgets/training_info_form_form_2_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FormScreen extends StatelessWidget {
+class FormScreen extends StatefulWidget {
   const FormScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final FormController formController = Get.put(FormController());
+  _FormScreenState createState() => _FormScreenState();
+}
 
+class _FormScreenState extends State<FormScreen> with WidgetsBindingObserver {
+  final FormController formController = Get.put(FormController());
+  FocusNode focusNode = FocusNode();
+  double bottomPadding = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    setState(() {
+      bottomPadding = bottomInset;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MainLayout(
       child: Container(
-        color: Colors.white,
+        color: Colors.red,
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Obx(() {
           final int currentIndex = formController.currentWidgetIndex.value;
           final WidgetWithImage currentWidgetWithImage =
               _getWidgetWithImageForIndex(currentIndex);
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (currentIndex < formController.totalWidgets)
-                  FormProgressBarWidget(formController: formController),
-                const SizedBox(height: 20),
-                QuestionsViewWidget(
-                  image: currentWidgetWithImage.image,
-                  child: currentWidgetWithImage.child,
+          return Container(
+            color: Colors.black,
+            child: SingleChildScrollView(
+              child: Container(
+                color: Colors.amber,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (currentIndex < formController.totalWidgets)
+                      FormProgressBarWidget(formController: formController),
+                    const SizedBox(height: 20),
+                    QuestionsViewWidget(
+                      image: currentWidgetWithImage.image,
+                      child: currentWidgetWithImage.child,
+                    ),
+                    const SizedBox(height: 20),
+                    // Este es el container que debe de bajar todo el scroll cuando el focus este en el cuadro de texto y ocultarse cuando no
+                    AnimatedContainer(
+                      color: Colors.blueAccent,
+                      duration: const Duration(milliseconds: 300),
+                      height: bottomPadding,
+                    )
+                  ],
                 ),
-                const SizedBox(height: 20),
-              ],
+              ),
             ),
           );
         }),
@@ -46,40 +85,6 @@ class FormScreen extends StatelessWidget {
     );
   }
 
-/*
-class FormScreen extends StatelessWidget {
-  const FormScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final FormController formController = Get.put(FormController());
-
-    return MainLayout(
-      child: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
-        child: Obx(() {
-          final int currentIndex = formController.currentWidgetIndex.value;
-          final WidgetWithImage currentWidgetWithImage =
-              _getWidgetWithImageForIndex(currentIndex);
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (currentIndex < formController.totalWidgets)
-                FormProgressBarWidget(formController: formController),
-              const SizedBox(height: 20),
-              QuestionsViewWidget(
-                image: currentWidgetWithImage.image,
-                child: currentWidgetWithImage.child,
-              ),
-              const SizedBox(height: 20),
-            ],
-          );
-        }),
-      ),
-    );
-  }
-*/
   WidgetWithImage _getWidgetWithImageForIndex(int index) {
     final List<WidgetWithImage> widgetsWithImages = [
       WidgetWithImage(
@@ -119,6 +124,141 @@ class WidgetWithImage {
   WidgetWithImage({required this.child, required this.image});
 }
 
+
+/*import 'package:fithub_v1/layout/main_layout.dart';
+import 'package:fithub_v1/providers/form_controller.dart';
+import 'package:fithub_v1/widgets/training_info_form_form_1_widget.dart';
+import 'package:fithub_v1/widgets/form_progress_bar_widget.dart';
+import 'package:fithub_v1/widgets/height_weight_heart_rate_form.dart';
+import 'package:fithub_v1/widgets/interview_completion_widget.dart';
+import 'package:fithub_v1/widgets/name_email_form.dart';
+import 'package:fithub_v1/widgets/questions_view_widget.dart';
+import 'package:fithub_v1/widgets/thank_you_widget.dart';
+import 'package:fithub_v1/widgets/training_info_form_form_2_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class FormScreen extends StatelessWidget {
+  const FormScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final FormController formController = Get.put(FormController());
+
+    return MainLayout(
+      child: Container(
+        color: Colors.red,
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Obx(() {
+          final int currentIndex = formController.currentWidgetIndex.value;
+          final WidgetWithImage currentWidgetWithImage =
+              _getWidgetWithImageForIndex(currentIndex);
+          return Container(
+            color: Colors.black,
+            child: SingleChildScrollView(
+              child: Container(
+                color: Colors.amber,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (currentIndex < formController.totalWidgets)
+                      FormProgressBarWidget(formController: formController),
+                    const SizedBox(height: 20),
+                    QuestionsViewWidget(
+                      image: currentWidgetWithImage.image,
+                      child: currentWidgetWithImage.child,
+                    ),
+                    const SizedBox(height: 20),
+                    // Este es el container que debe de bajar todo el scroll cuando el focus este en el cuadro de texto y ocultarse cuando no
+                    Container(
+                      color: Colors.blueAccent,
+                      height: 300,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  WidgetWithImage _getWidgetWithImageForIndex(int index) {
+    final List<WidgetWithImage> widgetsWithImages = [
+      WidgetWithImage(
+        child: const NameEmailForm(),
+        image: 'assets/images/form/undraw_Profile_data_re_v81r.png',
+      ),
+      WidgetWithImage(
+        child: const HeightWeightHeartRateForm(),
+        image: 'assets/images/form/undraw_Personal_data_re_ihde.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingInfoForm1(),
+        image: 'assets/images/form/undraw_track_and_field_33qn.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingInfoForm2(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const InterviewCompletionWidget(),
+        image: 'assets/images/form/undraw_Letter_re_8m03.png',
+      ),
+      WidgetWithImage(
+        child: const ThankYouWidget(),
+        image: 'assets/images/form/undraw_Time_management_re_tk5w.png',
+      ),
+    ];
+
+    return widgetsWithImages[index < widgetsWithImages.length ? index : 0];
+  }
+}
+
+class WidgetWithImage {
+  final Widget child;
+  final String image;
+
+  WidgetWithImage({required this.child, required this.image});
+}
+
+*/
+
+/*
+class FormScreen extends StatelessWidget {
+  const FormScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final FormController formController = Get.put(FormController());
+
+    return MainLayout(
+      child: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Obx(() {
+          final int currentIndex = formController.currentWidgetIndex.value;
+          final WidgetWithImage currentWidgetWithImage =
+              _getWidgetWithImageForIndex(currentIndex);
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (currentIndex < formController.totalWidgets)
+                FormProgressBarWidget(formController: formController),
+              const SizedBox(height: 20),
+              QuestionsViewWidget(
+                image: currentWidgetWithImage.image,
+                child: currentWidgetWithImage.child,
+              ),
+              const SizedBox(height: 20),
+            ],
+          );
+        }),
+      ),
+    );
+  }
+*/
 
 /*
 class FormScreen extends StatelessWidget {
