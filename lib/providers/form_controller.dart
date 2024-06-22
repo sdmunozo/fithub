@@ -8,8 +8,281 @@ import 'dart:convert';
 
 class FormController extends GetxController {
   var currentWidgetIndex = 0.obs;
+  final totalWidgets = 10;
+
+  Rx<UserResponse?> userResponse = Rx<UserResponse?>(null);
+  final responses = <Map<String, dynamic>>[].obs;
+  Rx<TrainingInfo?> trainingInfo = Rx<TrainingInfo?>(null);
+  RxBool hasReceivedTraining = false.obs;
+  RxBool hasReceivedTrainingFromApp = false.obs;
+
+  void nextQuestion() {
+    if (currentWidgetIndex.value < totalWidgets) {
+      if (currentWidgetIndex.value == 4 && !hasReceivedTraining.value) {
+        currentWidgetIndex.value +=
+            2; // Saltar la subpregunta si la respuesta es "No"
+      } else if (currentWidgetIndex.value == 6 &&
+          !hasReceivedTrainingFromApp.value) {
+        currentWidgetIndex.value +=
+            2; // Saltar la subpregunta si la respuesta es "No"
+      } else {
+        currentWidgetIndex.value++;
+      }
+    }
+  }
+
+  void previousQuestion() {
+    if (currentWidgetIndex.value > 0) {
+      if (currentWidgetIndex.value == 6 && !hasReceivedTraining.value) {
+        currentWidgetIndex.value -=
+            2; // Saltar la subpregunta si la respuesta es "No"
+      } else if (currentWidgetIndex.value == 8 &&
+          !hasReceivedTrainingFromApp.value) {
+        currentWidgetIndex.value -=
+            2; // Saltar la subpregunta si la respuesta es "No"
+      } else {
+        currentWidgetIndex.value--;
+      }
+    }
+  }
+
+  void updateUserResponse(UserResponse response) {
+    userResponse.value = response;
+    responses
+        .add({'question': 'User Information', 'answer': response.toJson()});
+  }
+
+  void updateHeight(Height height) {
+    responses.add({'question': 'Height', 'answer': height.toJson()});
+  }
+
+  void updateWeight(Weight weight) {
+    responses.add({'question': 'Weight', 'answer': weight.toJson()});
+  }
+
+  void updateHeartRate(HeartRate heartRate) {
+    responses.add({'question': 'Heart Rate', 'answer': heartRate.toJson()});
+  }
+
+  void updateTrainingInfo(TrainingInfo info) {
+    if (info.activityDuration.isNotEmpty &&
+        info.trainingDuration.isNotEmpty &&
+        info.trainingFrequency.isNotEmpty &&
+        info.trainingIntensity.isNotEmpty) {
+      info.trainingLevel = determineTrainingLevel(info);
+    }
+
+    trainingInfo.value = info;
+    responses.add({'question': 'Training Info', 'answer': info.toJson()});
+  }
+
+  void updatePersonalizedTrainingInfo(PersonalizedTrainingInfo info) {
+    final currentTrainingInfo = trainingInfo.value;
+    if (currentTrainingInfo != null) {
+      currentTrainingInfo.personalizedTrainingInfo = info;
+      trainingInfo.value = currentTrainingInfo;
+      responses.add(
+          {'question': 'Personalized Training Info', 'answer': info.toJson()});
+      hasReceivedTraining.value = info.hasReceivedTraining;
+    }
+  }
+
+  void updatePersonalizedTrainingExperience(String experienceDescription) {
+    final currentTrainingInfo = trainingInfo.value;
+    if (currentTrainingInfo != null &&
+        currentTrainingInfo.personalizedTrainingInfo != null) {
+      currentTrainingInfo.personalizedTrainingInfo!.experienceDescription =
+          experienceDescription;
+      trainingInfo.value = currentTrainingInfo;
+      responses.add({
+        'question': 'Personalized Training Experience',
+        'answer': experienceDescription
+      });
+    }
+  }
+
+  void updateAppTrainingInfo(AppTrainingInfo info) {
+    final currentTrainingInfo = trainingInfo.value;
+    if (currentTrainingInfo != null) {
+      currentTrainingInfo.appTrainingInfo = info;
+      trainingInfo.value = currentTrainingInfo;
+      responses.add({'question': 'Training App Info', 'answer': info.toJson()});
+      hasReceivedTrainingFromApp.value = info.hasReceivedTrainingFromApp;
+    }
+  }
+
+  void updateAppTrainingExperience(String experienceDescription) {
+    final currentTrainingInfo = trainingInfo.value;
+    if (currentTrainingInfo != null &&
+        currentTrainingInfo.appTrainingInfo != null) {
+      currentTrainingInfo.appTrainingInfo!.experienceDescription =
+          experienceDescription;
+      trainingInfo.value = currentTrainingInfo;
+      responses.add({
+        'question': 'Training App Experience',
+        'answer': experienceDescription
+      });
+    }
+  }
+
+  void printResponses() {
+    for (var response in responses) {
+      print(jsonEncode(response));
+    }
+  }
+
+  String determineTrainingLevel(TrainingInfo info) {
+    int activityDuration = convertDuration(info.activityDuration);
+    int trainingFrequency = convertFrequency(info.trainingFrequency);
+    int trainingDuration = convertDurationMinutes(info.trainingDuration);
+    int trainingIntensity = convertIntensity(info.trainingIntensity);
+    String nvp = "PRINCIPIANTE";
+    String nvi = "INTERMEDIO";
+    String nva = "AVANZADO";
+
+    if (activityDuration <= 3) {
+      return nvp;
+    } else if (3 < activityDuration && activityDuration <= 6) {
+      if (trainingFrequency < 4 ||
+          (trainingFrequency == 4 && trainingDuration <= 60) ||
+          (trainingFrequency > 4 && trainingDuration <= 45)) {
+        return nvp;
+      }
+      if (trainingFrequency > 4 &&
+          60 <= trainingDuration &&
+          trainingDuration <= 90) {
+        return nvi;
+      }
+    } else if (6 < activityDuration && activityDuration <= 9) {
+      if (trainingFrequency < 3 ||
+          (trainingFrequency == 3 &&
+              trainingDuration <= 45 &&
+              trainingIntensity <= 2)) {
+        return nvp;
+      }
+    } else if (9 < activityDuration && activityDuration <= 12) {
+      if (trainingFrequency < 3 ||
+          (trainingFrequency == 3 && trainingDuration < 30) ||
+          (trainingFrequency > 4 &&
+              trainingDuration < 45 &&
+              trainingIntensity <= 2)) {
+        return nvp;
+      } else if (trainingFrequency == 5 &&
+          trainingDuration >= 60 &&
+          trainingIntensity == 2) {
+        return nvi;
+      } else if (trainingFrequency >= 6 &&
+          trainingDuration > 60 &&
+          trainingIntensity >= 2) {
+        return nva;
+      } else if (trainingFrequency == 5 &&
+          45 <= trainingDuration &&
+          trainingDuration <= 60 &&
+          trainingIntensity >= 2) {
+        return nvi;
+      } else if (trainingFrequency == 5 &&
+          trainingDuration <= 60 &&
+          trainingIntensity >= 2) {
+        return nva;
+      } else if (trainingFrequency >= 6 &&
+          trainingDuration >= 45 &&
+          trainingIntensity == 3) {
+        return nva;
+      }
+    } else if (12 <= activityDuration && activityDuration <= 18) {
+      if (trainingIntensity == 1) {
+        return nvp;
+      }
+      if (trainingFrequency < 3 ||
+          (trainingFrequency <= 7 && trainingDuration <= 30)) {
+        return nvp;
+      }
+    } else if (activityDuration > 18) {
+      if (trainingIntensity == 1) {
+        return nvp;
+      }
+      if (trainingFrequency < 3 ||
+          (trainingFrequency == 4 && trainingDuration <= 30)) {
+        return nvp;
+      }
+      if (trainingIntensity == 1) {
+        return nva;
+      }
+    }
+
+    if (activityDuration > 3) {
+      if (trainingFrequency == 3 &&
+          30 <= trainingDuration &&
+          trainingDuration <= 45 &&
+          trainingIntensity == 3) {
+        return nvi;
+      } else if (trainingFrequency == 3 &&
+          trainingDuration >= 45 &&
+          trainingIntensity > 1) {
+        return nvi;
+      } else if (3 <= trainingFrequency &&
+          trainingFrequency <= 4 &&
+          trainingDuration >= 45 &&
+          trainingIntensity == 2) {
+        return nvi;
+      } else if (trainingFrequency == 4 &&
+          trainingDuration > 60 &&
+          trainingIntensity == 2) {
+        return nvi;
+      } else if (trainingFrequency >= 5 &&
+          trainingDuration >= 60 &&
+          trainingIntensity == 1) {
+        return nvi;
+      } else if (trainingFrequency >= 5 &&
+          trainingDuration <= 60 &&
+          trainingIntensity == 2) {
+        return nvi;
+      } else if (trainingFrequency == 4 &&
+          trainingDuration <= 60 &&
+          trainingIntensity >= 2) {
+        return nvi;
+      } else if (trainingFrequency >= 4 &&
+          30 <= trainingDuration &&
+          trainingDuration <= 45 &&
+          trainingIntensity >= 2) {
+        return nvi;
+      }
+    }
+
+    if ((activityDuration >= 9 &&
+            trainingFrequency >= 5 &&
+            trainingDuration >= 45 &&
+            trainingIntensity > 1) ||
+        (activityDuration >= 12 &&
+            trainingFrequency == 4 &&
+            trainingDuration >= 45 &&
+            trainingIntensity == 3)) {
+      return nva;
+    }
+
+    return '- NO CAYO EN NINGUN NIVEL';
+  }
+}
+
+
+
+
+
+/*
+import 'package:fithub_v1/models/heart_rate.dart';
+import 'package:fithub_v1/models/height.dart';
+import 'package:fithub_v1/models/training_info.dart';
+import 'package:fithub_v1/models/user_response.dart';
+import 'package:fithub_v1/models/weight.dart';
+import 'package:get/get.dart';
+import 'dart:convert';
+
+class FormController extends GetxController {
+  var currentWidgetIndex = 0.obs;
   //final totalQuestions = 9;
-  final totalWidgets = 6;
+  final totalWidgets = 8;
+  RxBool hasReceivedTraining = false.obs;
+  RxBool hasReceivedTrainingFromApp = false.obs;
 
   Rx<UserResponse?> userResponse = Rx<UserResponse?>(null);
   final responses = <Map<String, dynamic>>[].obs;
@@ -17,19 +290,66 @@ class FormController extends GetxController {
 
   void nextQuestion() {
     if (currentWidgetIndex.value < totalWidgets) {
-      currentWidgetIndex.value++;
+      if (currentWidgetIndex.value == 4 && !hasReceivedTraining.value) {
+        currentWidgetIndex.value +=
+            2; // Saltar la subpregunta si la respuesta es "No"
+      } else if (currentWidgetIndex.value == 6 &&
+          !hasReceivedTrainingFromApp.value) {
+        currentWidgetIndex.value +=
+            2; // Saltar la subpregunta si la respuesta es "No"
+      } else {
+        currentWidgetIndex.value++;
+      }
     }
   }
-/*
-  void nextQuestion() {
-    if (currentQuestionIndex.value < totalQuestions) {
-      currentQuestionIndex.value++;
-    }
-  }*/
 
   void previousQuestion() {
     if (currentWidgetIndex.value > 0) {
-      currentWidgetIndex.value--;
+      if (currentWidgetIndex.value == 6 && !hasReceivedTraining.value) {
+        currentWidgetIndex.value -=
+            2; // Saltar la subpregunta si la respuesta es "No"
+      } else if (currentWidgetIndex.value == 8 &&
+          !hasReceivedTrainingFromApp.value) {
+        currentWidgetIndex.value -=
+            2; // Saltar la subpregunta si la respuesta es "No"
+      } else {
+        currentWidgetIndex.value--;
+      }
+    }
+  }
+
+  void updatePersonalizedTrainingExperience(String experienceDescription) {
+    final currentTrainingInfo = trainingInfo.value;
+    if (currentTrainingInfo != null &&
+        currentTrainingInfo.personalizedTrainingInfo != null) {
+      currentTrainingInfo.personalizedTrainingInfo!.experienceDescription =
+          experienceDescription;
+      trainingInfo.value = currentTrainingInfo;
+      responses.add({
+        'question': 'Personalized Training Experience',
+        'answer': experienceDescription
+      });
+    }
+  }
+
+  void updateTrainingAppInfo(TrainingAppInfo info) {
+    final currentTrainingInfo = trainingInfo.value;
+    if (currentTrainingInfo != null) {
+      currentTrainingInfo.trainingAppInfo = info;
+      trainingInfo.value = currentTrainingInfo;
+      responses.add({'question': 'Training App Info', 'answer': info.toJson()});
+      hasReceivedTrainingFromApp.value = info.hasReceivedTrainingFromApp;
+    }
+  }
+
+  void updatePersonalizedTrainingInfo(PersonalizedTrainingInfo info) {
+    final currentTrainingInfo = trainingInfo.value;
+    if (currentTrainingInfo != null) {
+      currentTrainingInfo.personalizedTrainingInfo = info;
+      trainingInfo.value = currentTrainingInfo;
+      responses.add(
+          {'question': 'Personalized Training Info', 'answer': info.toJson()});
+      hasReceivedTraining.value = info.hasReceivedTraining;
     }
   }
 
@@ -202,6 +522,60 @@ class FormController extends GetxController {
   }
 }
 
+*/
+/*
+  void nextQuestion() {
+    if (currentWidgetIndex.value < totalWidgets) {
+      if (currentWidgetIndex.value == 4 && !hasReceivedTraining.value) {
+        currentWidgetIndex.value +=
+            2; // Saltar la subpregunta si la respuesta es "No"
+      } else {
+        currentWidgetIndex.value++;
+      }
+    }
+  }
+
+  void previousQuestion() {
+    if (currentWidgetIndex.value > 0) {
+      if (currentWidgetIndex.value == 6 && !hasReceivedTraining.value) {
+        currentWidgetIndex.value -=
+            2; // Saltar la subpregunta si la respuesta es "No"
+      } else {
+        currentWidgetIndex.value--;
+      }
+    }
+  }
+
+  */
+
+/*
+  void updatePersonalizedTrainingInfo(PersonalizedTrainingInfo info) {
+    final currentTrainingInfo = trainingInfo.value;
+    if (currentTrainingInfo != null) {
+      currentTrainingInfo.personalizedTrainingInfo = info;
+      trainingInfo.value = currentTrainingInfo;
+      responses.add(
+          {'question': 'Personalized Training Info', 'answer': info.toJson()});
+      hasReceivedTraining.value = info.hasReceivedTraining;
+    }
+  }
+
+  void updatePersonalizedTrainingExperience(String experienceDescription) {
+    final currentTrainingInfo = trainingInfo.value;
+    if (currentTrainingInfo != null &&
+        currentTrainingInfo.personalizedTrainingInfo != null) {
+      currentTrainingInfo.personalizedTrainingInfo!.experienceDescription =
+          experienceDescription;
+      trainingInfo.value = currentTrainingInfo;
+      responses.add({
+        'question': 'Personalized Training Experience',
+        'answer': experienceDescription
+      });
+    }
+  }
+  */
+
+  
 /*
   String determineTrainingLevel(TrainingInfo info) {
     int activityDuration = convertDuration(info.activityDuration);

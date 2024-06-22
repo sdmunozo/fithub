@@ -1,4 +1,139 @@
+class PersonalizedTrainingInfo {
+  final bool hasReceivedTraining;
+  String experienceDescription;
+
+  PersonalizedTrainingInfo({
+    required this.hasReceivedTraining,
+    required this.experienceDescription,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'hasReceivedTraining': hasReceivedTraining,
+        'experienceDescription': experienceDescription,
+      };
+
+  static PersonalizedTrainingInfo fromJson(Map<String, dynamic> json) {
+    return PersonalizedTrainingInfo(
+      hasReceivedTraining: json['hasReceivedTraining'],
+      experienceDescription: json['experienceDescription'],
+    );
+  }
+}
+
+class AppTrainingInfo {
+  final bool hasReceivedTrainingFromApp;
+  String experienceDescription;
+
+  AppTrainingInfo({
+    required this.hasReceivedTrainingFromApp,
+    required this.experienceDescription,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'hasReceivedTrainingFromApp': hasReceivedTrainingFromApp,
+        'experienceDescription': experienceDescription,
+      };
+
+  static AppTrainingInfo fromJson(Map<String, dynamic> json) {
+    return AppTrainingInfo(
+      hasReceivedTrainingFromApp: json['hasReceivedTrainingFromApp'],
+      experienceDescription: json['experienceDescription'],
+    );
+  }
+}
+
 class TrainingInfo {
+  final String activityDuration;
+  final String trainingDuration;
+  final String trainingFrequency;
+  final String trainingIntensity;
+  String trainingLevel;
+  PersonalizedTrainingInfo? personalizedTrainingInfo;
+  AppTrainingInfo? appTrainingInfo;
+
+  TrainingInfo({
+    required this.activityDuration,
+    required this.trainingDuration,
+    required this.trainingFrequency,
+    required this.trainingIntensity,
+    this.trainingLevel = '',
+    this.personalizedTrainingInfo,
+    this.appTrainingInfo,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'activityDuration': activityDuration,
+        'trainingDuration': trainingDuration,
+        'trainingFrequency': trainingFrequency,
+        'trainingIntensity': trainingIntensity,
+        'trainingLevel': trainingLevel,
+        'personalizedTrainingInfo': personalizedTrainingInfo?.toJson(),
+        'appTrainingInfo': appTrainingInfo?.toJson(),
+      };
+
+  static TrainingInfo fromJson(Map<String, dynamic> json) {
+    return TrainingInfo(
+      activityDuration: json['activityDuration'],
+      trainingDuration: json['trainingDuration'],
+      trainingFrequency: json['trainingFrequency'],
+      trainingIntensity: json['trainingIntensity'],
+      trainingLevel: json['trainingLevel'],
+      personalizedTrainingInfo: json['personalizedTrainingInfo'] != null
+          ? PersonalizedTrainingInfo.fromJson(json['personalizedTrainingInfo'])
+          : null,
+      appTrainingInfo: json['appTrainingInfo'] != null
+          ? AppTrainingInfo.fromJson(json['appTrainingInfo'])
+          : null,
+    );
+  }
+}
+
+/*
+class TrainingInfo {
+  final String activityDuration;
+  final String trainingDuration;
+  final String trainingFrequency;
+  final String trainingIntensity;
+  String trainingLevel;
+  PersonalizedTrainingInfo? personalizedTrainingInfo;
+
+  TrainingInfo({
+    required this.activityDuration,
+    required this.trainingDuration,
+    required this.trainingFrequency,
+    required this.trainingIntensity,
+    this.trainingLevel = '',
+    this.personalizedTrainingInfo,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'activityDuration': activityDuration,
+        'trainingDuration': trainingDuration,
+        'trainingFrequency': trainingFrequency,
+        'trainingIntensity': trainingIntensity,
+        'trainingLevel': trainingLevel,
+        'personalizedTrainingInfo': personalizedTrainingInfo?.toJson(),
+      };
+
+  static TrainingInfo fromJson(Map<String, dynamic> json) {
+    return TrainingInfo(
+      activityDuration: json['activityDuration'],
+      trainingDuration: json['trainingDuration'],
+      trainingFrequency: json['trainingFrequency'],
+      trainingIntensity: json['trainingIntensity'],
+      trainingLevel: json['trainingLevel'],
+      personalizedTrainingInfo: json['personalizedTrainingInfo'] != null
+          ? PersonalizedTrainingInfo.fromJson(json['personalizedTrainingInfo'])
+          : null,
+    );
+  }
+}
+
+
+
+*/
+
+/*class TrainingInfo {
   final String activityDuration;
   final String trainingDuration;
   final String trainingFrequency;
@@ -31,6 +166,7 @@ class TrainingInfo {
     );
   }
 }
+*/
 
 int convertDuration(String duration) {
   switch (duration) {

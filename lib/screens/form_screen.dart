@@ -1,5 +1,9 @@
 import 'package:fithub_v1/layout/main_layout.dart';
 import 'package:fithub_v1/providers/form_controller.dart';
+import 'package:fithub_v1/widgets/personalized_training_experience_form_widget.dart';
+import 'package:fithub_v1/widgets/personalized_training_form_widget.dart';
+import 'package:fithub_v1/widgets/training_app_experience_form_widget.dart';
+import 'package:fithub_v1/widgets/training_app_form_widget.dart';
 import 'package:fithub_v1/widgets/training_info_form_form_1_widget.dart';
 import 'package:fithub_v1/widgets/form_progress_bar_widget.dart';
 import 'package:fithub_v1/widgets/height_weight_heart_rate_form.dart';
@@ -70,6 +74,22 @@ class FormScreen extends StatelessWidget {
         image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
       ),
       WidgetWithImage(
+        child: const PersonalizedTrainingFormWidget(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const PersonalizedTrainingExperienceFormWidget(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingAppFormWidget(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingAppExperienceFormWidget(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
         child: const InterviewCompletionWidget(),
         image: 'assets/images/form/undraw_Letter_re_8m03.png',
       ),
@@ -82,6 +102,131 @@ class FormScreen extends StatelessWidget {
     return widgetsWithImages[index < widgetsWithImages.length ? index : 0];
   }
 }
+
+/*
+  WidgetWithImage _getWidgetWithImageForIndex(int index) {
+    final List<WidgetWithImage> widgetsWithImages = [
+      WidgetWithImage(
+        child: NameEmailForm(scrollController: _scrollController),
+        image: 'assets/images/form/undraw_Profile_data_re_v81r.png',
+      ),
+      WidgetWithImage(
+        child: const HeightWeightHeartRateForm(),
+        image: 'assets/images/form/undraw_Personal_data_re_ihde.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingInfoForm1(),
+        image: 'assets/images/form/undraw_track_and_field_33qn.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingInfoForm2(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const PersonalizedTrainingFormWidget(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const PersonalizedTrainingExperienceFormWidget(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingAppFormWidget(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingAppExperienceFormWidget(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const InterviewCompletionWidget(),
+        image: 'assets/images/form/undraw_Letter_re_8m03.png',
+      ),
+      WidgetWithImage(
+        child: const ThankYouWidget(),
+        image: 'assets/images/form/undraw_Time_management_re_tk5w.png',
+      ),
+    ];
+
+    return widgetsWithImages[index < widgetsWithImages.length ? index : 0];
+  }
+}
+*/
+/*
+  WidgetWithImage _getWidgetWithImageForIndex(int index) {
+    final List<WidgetWithImage> widgetsWithImages = [
+      WidgetWithImage(
+        child: NameEmailForm(scrollController: _scrollController),
+        image: 'assets/images/form/undraw_Profile_data_re_v81r.png',
+      ),
+      WidgetWithImage(
+        child: const HeightWeightHeartRateForm(),
+        image: 'assets/images/form/undraw_Personal_data_re_ihde.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingInfoForm1(),
+        image: 'assets/images/form/undraw_track_and_field_33qn.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingInfoForm2(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const PersonalizedTrainingFormWidget(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const PersonalizedTrainingExperienceFormWidget(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const InterviewCompletionWidget(),
+        image: 'assets/images/form/undraw_Letter_re_8m03.png',
+      ),
+      WidgetWithImage(
+        child: const ThankYouWidget(),
+        image: 'assets/images/form/undraw_Time_management_re_tk5w.png',
+      ),
+    ];
+
+    return widgetsWithImages[index < widgetsWithImages.length ? index : 0];
+  }
+}
+
+*/
+
+/*
+  WidgetWithImage _getWidgetWithImageForIndex(int index) {
+    final List<WidgetWithImage> widgetsWithImages = [
+      WidgetWithImage(
+        child: NameEmailForm(scrollController: _scrollController),
+        image: 'assets/images/form/undraw_Profile_data_re_v81r.png',
+      ),
+      WidgetWithImage(
+        child: const HeightWeightHeartRateForm(),
+        image: 'assets/images/form/undraw_Personal_data_re_ihde.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingInfoForm1(),
+        image: 'assets/images/form/undraw_track_and_field_33qn.png',
+      ),
+      WidgetWithImage(
+        child: const TrainingInfoForm2(),
+        image: 'assets/images/form/undraw_Check_boxes_re_v40f.png',
+      ),
+      WidgetWithImage(
+        child: const InterviewCompletionWidget(),
+        image: 'assets/images/form/undraw_Letter_re_8m03.png',
+      ),
+      WidgetWithImage(
+        child: const ThankYouWidget(),
+        image: 'assets/images/form/undraw_Time_management_re_tk5w.png',
+      ),
+    ];
+
+    return widgetsWithImages[index < widgetsWithImages.length ? index : 0];
+  }
+}*/
 
 class WidgetWithImage {
   final Widget child;
